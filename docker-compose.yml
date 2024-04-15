@@ -1,0 +1,39 @@
+version: '3.3'
+services:
+  kafka:
+    image: bitnami/kafka:latest
+    ports:
+      - "9094:9094"
+    environment:
+      - KAFKA_CFG_NODE_ID=0
+      - KAFKA_CFG_PROCESS_ROLES=CONTROLLER, broker
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,EXTERNAL://localhost:9094
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_OFFSETS_TOPIC_REPLICATION_FACTOR= 1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  #prometheus:
+    #image: prom/prometheus
+    #container_name: prometheus
+    #volumes:
+      #- ./script/cfg/prometheus.yaml:/etc/prometheus/prometheus.yaml
+    #ports:
+      #- 9090:9090
+  #grafana:
+    #image: grafana/grafana
+    #container_name: grafana
+    #restart: always
+    #ports:
+      #- 3003:3003
+    #volumes:
+      #- ./script/cfg/grafana/provisioning:/etc/grafana/provisioning
+      #- ./script/cfg/grafana/grafana.ini:/etc/grafana/grafana.ini
+
+  #zipkin:
+    #image: openzipkin/zipkin
+    #container_name: zipkin
+    #ports:
+      #- "9411:9411" # Expose the Zipkin UI port
